@@ -1,4 +1,7 @@
 from fastapi import APIRouter, Depends, Request, status
+from fastapi.exceptions import RequestValidationError
+from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
 from app.db.database import get_db
@@ -35,10 +38,17 @@ def register(
 
 @router.post("/login", response_model=TokenResponse)
 def login(
-	credentials: UserLogin,
 	request: Request,
+	form_data: OAuth2PasswordRequestForm = Depends(),
 	db: Session = Depends(get_db),
 ):
+	try:
+		credentials = UserLogin(
+			email=form_data.username,
+			password=form_data.password,
+		)
+	except ValidationError as exc:
+		raise RequestValidationError(exc.errors()) from exc
 	key = f"{credentials.email}:{request.client.host if request.client else 'unknown'}"
 	ensure_login_allowed(key)
 	try:
