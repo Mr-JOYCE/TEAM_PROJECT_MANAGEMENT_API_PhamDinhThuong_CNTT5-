@@ -14,6 +14,10 @@ async def http_exception_handler(
         code = "BAD_REQUEST"
         message = "Bad request"
 
+    elif status_code == 401:
+        code = "UNAUTHORIZED"
+        message = "Authentication required"
+
     elif status_code == 403:
         code = "FORBIDDEN"
         message = "Permission denied"
@@ -28,6 +32,7 @@ async def http_exception_handler(
 
     return JSONResponse(
         status_code=status_code,
+        headers=exc.headers,
         content={
             "status": status_code,
             "code": code,

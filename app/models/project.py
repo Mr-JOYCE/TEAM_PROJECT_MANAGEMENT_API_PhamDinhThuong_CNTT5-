@@ -37,7 +37,7 @@ class Project(Base):
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,
-        default=datetime.now(),
+        default=datetime.now,
         nullable=False
     )
 

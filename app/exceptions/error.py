@@ -32,3 +32,24 @@ class NotFoundException(HTTPException):
             status_code=status.HTTP_404_NOT_FOUND,
             detail=detail
         )
+
+
+class UnauthorizedException(HTTPException):
+    def __init__(
+        self,
+        detail: str = "Invalid email or password"
+    ):
+        super().__init__(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail=detail,
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+
+class TooManyRequestsException(HTTPException):
+    def __init__(self, retry_after: int):
+        super().__init__(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many login attempts",
+            headers={"Retry-After": str(retry_after)}
+        )
