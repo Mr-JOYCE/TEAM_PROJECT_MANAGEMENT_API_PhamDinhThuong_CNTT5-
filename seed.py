@@ -22,15 +22,15 @@ def seed_database():
     try:
 
         admin = User(
-            email="admin@example.com",
-            password_hash=hash_password("Admin@123"),
+            email="dinhthuong979@gmail.com",
+            password_hash=hash_password("dinhthuong123"),
             full_name="System Administrator",
             role="ADMIN",
             is_active=True,
         )
 
         user1 = User(
-            email="nguyenan@example.com",
+            email="nguyenan@gmail.com",
             password_hash=hash_password("User@123"),
             full_name="Nguyen An",
             role="USER",
@@ -38,7 +38,7 @@ def seed_database():
         )
 
         user2 = User(
-            email="tranbinh@example.com",
+            email="tranbinh@gmail.com",
             password_hash=hash_password("User@123"),
             full_name="Tran Binh",
             role="USER",
@@ -46,7 +46,7 @@ def seed_database():
         )
 
         user3 = User(
-            email="levan@example.com",
+            email="levan@gmail.com",
             password_hash=hash_password("User@123"),
             full_name="Le Van",
             role="USER",
@@ -187,10 +187,10 @@ def seed_database():
         print("===================================")
 
         print("\nUsers:")
-        print("admin@example.com / Admin@123")
-        print("nguyenan@example.com / User@123")
-        print("tranbinh@example.com / User@123")
-        print("levan@example.com / User@123")
+        print("dinhthuong979@gmail.com / dinhthuong123")
+        print("nguyenan@gmail.com / User@123")
+        print("tranbinh@gmail.com / User@123")
+        print("levan@gmail.com / User@123")
 
         print("\nProjects:")
         print("- Project Management API")
