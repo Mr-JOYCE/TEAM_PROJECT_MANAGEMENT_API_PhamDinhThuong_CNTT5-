@@ -1,10 +1,10 @@
 from datetime import datetime
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.models.task import TaskPriority, TaskStatus
 
 class TaskBase(BaseModel):
-    title: str
+    title: str = Field(min_length=1, max_length=255)
     description: str | None = None
     assignee_id: int | None = None
     status: TaskStatus = TaskStatus.TODO

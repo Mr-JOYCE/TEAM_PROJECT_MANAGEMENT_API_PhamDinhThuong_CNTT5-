@@ -2,18 +2,14 @@ from datetime import datetime
 from typing import Optional
 import enum
 
-from sqlalchemy import (
-    DateTime,
-    Enum,
-    ForeignKey,
-    String,
-    Text
-)
+from sqlalchemy import DateTime, Enum, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..db.database import Base
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
+    from app.models.task_comment import TaskComment
+    from app.models.task_attachment import TaskAttachment
     from app.models.project import Project
     from app.models.user import User
 
@@ -88,4 +84,16 @@ class Task(Base):
     assignee: Mapped[Optional["User"]] = relationship(
         "User",
         back_populates="assigned_tasks"
+    )
+
+    comments: Mapped[list["TaskComment"]] = relationship(
+        "TaskComment",
+        back_populates="task",
+        cascade="all, delete-orphan",
+    )
+
+    attachments: Mapped[list["TaskAttachment"]] = relationship(
+        "TaskAttachment",
+        back_populates="task",
+        cascade="all, delete-orphan",
     )

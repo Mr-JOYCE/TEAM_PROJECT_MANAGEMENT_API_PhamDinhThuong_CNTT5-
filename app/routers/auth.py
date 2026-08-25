@@ -41,6 +41,9 @@ class LoginForm:
 	"/register",
 	response_model=UserResponse,
 	status_code=status.HTTP_201_CREATED,
+summary="Đăng ký tài khoản",
+description="Tạo tài khoản USER mới. Email phải là duy nhất.",
+responses={400: {"description": "Email đã được đăng ký."}, 422: {"description": "Dữ liệu đầu vào không hợp lệ."}},
 )
 def register(
 	user_data: UserCreate,
@@ -49,7 +52,13 @@ def register(
 	return register_user(db, user_data)
 
 
-@router.post("/login", response_model=TokenResponse)
+@router.post(
+	"/login",
+	response_model=TokenResponse,
+	summary="Đăng nhập",
+	description="Xác thực bằng email và password để nhận access token và refresh token.",
+	responses={401: {"description": "Sai thông tin đăng nhập."}, 403: {"description": "Tài khoản bị vô hiệu hóa."}, 429: {"description": "Quá nhiều lần đăng nhập thất bại."}},
+)
 def login(
 	request: Request,
 	form_data: LoginForm = Depends(),
@@ -73,7 +82,13 @@ def login(
 	return result
 
 
-@router.post("/refresh", response_model=TokenResponse)
+@router.post(
+	"/refresh",
+	response_model=TokenResponse,
+	summary="Làm mới token",
+	description="Đổi refresh token hợp lệ lấy một cặp access/refresh token mới.",
+	responses={401: {"description": "Refresh token không hợp lệ hoặc đã hết hạn."}, 403: {"description": "Tài khoản bị vô hiệu hóa."}},
+)
 def refresh(
 	token_data: RefreshTokenRequest,
 	db: Session = Depends(get_db),

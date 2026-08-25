@@ -2,6 +2,7 @@ from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import IntegrityError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 
@@ -55,4 +56,19 @@ async def validation_exception_handler(
             "message": "Request validation failed",
             "detail": jsonable_encoder(exc.errors())
         }
+    )
+
+
+async def integrity_exception_handler(
+    request: Request,
+    exc: IntegrityError,
+):
+    return JSONResponse(
+        status_code=409,
+        content={
+            "status": 409,
+            "code": "CONFLICT",
+            "message": "The request conflicts with existing data",
+            "detail": "The request could not be completed because it conflicts with existing data",
+        },
     )

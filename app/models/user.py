@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from app.models.project import Project
     from app.models.project_member import ProjectMember
     from app.models.task import Task
+    from app.models.task_comment import TaskComment
 
 
 class UserRole(str, enum.Enum):
@@ -78,4 +79,9 @@ class User(Base):
     assigned_tasks: Mapped[list["Task"]] = relationship(
         "Task",
         back_populates="assignee"
+    )
+
+    task_comments: Mapped[list["TaskComment"]] = relationship(
+        "TaskComment",
+        back_populates="author",
     )

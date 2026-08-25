@@ -11,12 +11,12 @@ from app.services.user_service import get_users
 router = APIRouter(prefix="/users", tags=["Users"])
 
 
-@router.get("/me", response_model=UserResponse)
+@router.get("/me", response_model=UserResponse, summary="Xem hồ sơ của tôi", responses={401: {"description": "Chưa xác thực."}})
 def get_me(current_user: User = Depends(get_current_user)):
 	return current_user
 
 
-@router.get("", response_model=list[UserResponse])
+@router.get("", response_model=list[UserResponse], summary="Liệt kê người dùng", description="Chỉ ADMIN được xem danh sách người dùng.", responses={401: {"description": "Chưa xác thực."}, 403: {"description": "Chỉ ADMIN được phép."}})
 def list_users(
 	search: str | None = Query(default=None),
 	is_active: bool | None = Query(default=None),
