@@ -7,8 +7,10 @@ class ProjectMemberBase(BaseModel):
     user_id: int
     role: ProjectMemberRole = ProjectMemberRole.MEMBER
 
-class ProjectMemberCreate(ProjectMemberBase):
-    pass
+class ProjectMemberCreate(BaseModel):
+    user_id: int
+
+    model_config = ConfigDict(extra="forbid")
 
 class ProjectMemberUpdate(BaseModel):
     role: ProjectMemberRole

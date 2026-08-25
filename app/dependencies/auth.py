@@ -10,7 +10,11 @@ from app.exceptions.error import ForbiddenException, UnauthorizedException
 from app.models.user import User, UserRole
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl="/auth/login",
+    scheme_name="EmailBearer",
+    description="Bearer JWT. Use the account email in the login form username field.",
+)
 
 
 def get_current_user(

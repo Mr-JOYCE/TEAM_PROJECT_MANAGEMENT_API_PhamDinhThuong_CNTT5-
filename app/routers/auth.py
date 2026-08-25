@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Depends, Request, status
+from fastapi import APIRouter, Depends, Form, Request, status
 from fastapi.exceptions import RequestValidationError
-from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
@@ -24,6 +23,20 @@ from app.services.rate_limit import (
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
+class LoginForm:
+	def __init__(
+		self,
+		email: str | None = Form(None, description="Account email"),
+		username: str | None = Form(
+			None,
+			description="Account email (OAuth2 compatibility)",
+		),
+		password: str = Form(...),
+	):
+		self.email = email or username
+		self.password = password
+
+
 @router.post(
 	"/register",
 	response_model=UserResponse,
@@ -39,12 +52,12 @@ def register(
 @router.post("/login", response_model=TokenResponse)
 def login(
 	request: Request,
-	form_data: OAuth2PasswordRequestForm = Depends(),
+	form_data: LoginForm = Depends(),
 	db: Session = Depends(get_db),
 ):
 	try:
 		credentials = UserLogin(
-			email=form_data.username,
+			email=form_data.email,
 			password=form_data.password,
 		)
 	except ValidationError as exc:

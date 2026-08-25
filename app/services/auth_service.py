@@ -15,7 +15,7 @@ from app.exceptions.error import (
 	ForbiddenException,
 	UnauthorizedException,
 )
-from app.models.user import User
+from app.models.user import User, UserRole
 from app.schemas.user import RefreshTokenRequest, TokenResponse, UserCreate, UserLogin
 
 
@@ -27,10 +27,10 @@ def register_user(db: Session, user_data: UserCreate) -> User:
 		raise BadRequestException("Email already registered")
 
 	user = User(
-		email=user_data.email,
+		email=str(user_data.email).lower(),
 		password_hash=hash_password(user_data.password),
 		full_name=user_data.full_name,
-		role=user_data.role,
+		role=UserRole.USER,
 	)
 	db.add(user)
 	try:
