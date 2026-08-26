@@ -37,7 +37,7 @@ def register_user(db: Session, user_data: UserCreate) -> User:
 		db.commit()
 	except IntegrityError:
 		db.rollback()
-		raise BadRequestException("Email already registered")
+		raise BadRequestException("Error: Please register again")
 	db.refresh(user)
 	return user
 
